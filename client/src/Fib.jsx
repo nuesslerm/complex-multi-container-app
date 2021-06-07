@@ -2,13 +2,17 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const fetchValues = async (setValues) => {
-  const values = await axios.get('/api/values/current');
-  setValues(values.data);
+  try {
+    const values = await axios.get('/api/values/current');
+    setValues(values.data);
+  } catch {}
 };
 
 const fetchIndexes = async (setSeenIndexes) => {
-  const seenIndexes = await axios.get('/api/values/all');
-  setSeenIndexes(seenIndexes.data);
+  try {
+    const seenIndexes = await axios.get('/api/values/all');
+    setSeenIndexes(seenIndexes.data);
+  } catch {}
 };
 
 const onlyNumRegep = /^[0-9\b]+$/;
