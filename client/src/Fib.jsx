@@ -11,6 +11,8 @@ const fetchIndexes = async (setSeenIndexes) => {
   setSeenIndexes(seenIndexes.data);
 };
 
+const onlyNumRegep = /^[0-9\b]+$/;
+
 const Fib = () => {
   const [seenIndexes, setSeenIndexes] = useState([]);
   const [values, setValues] = useState({});
@@ -24,7 +26,10 @@ const Fib = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    await axios.post('/api/values', { index });
+    if (onlyNumRegep.test(index)) {
+      await axios.post('/api/values', { index });
+    }
+
     setIndex('');
   };
 
@@ -36,7 +41,11 @@ const Fib = () => {
           type="text"
           id="indexInput"
           value={index}
-          onChange={(event) => setIndex(event.target.value)}
+          onChange={({ target: { value } }) => {
+            // if value is not blank, then test the regex; if input passes, then continue
+            if (value !== '' && !onlyNumRegep.test(value)) return;
+            setIndex(value);
+          }}
         />
         <button>Submit</button>
       </form>

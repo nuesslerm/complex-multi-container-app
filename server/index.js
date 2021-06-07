@@ -5,6 +5,8 @@ const redis = require('redis');
 
 const keys = require('./apiKeys');
 
+const PORT = 5000;
+
 // express app setup
 const app = express();
 app.use(cors());
@@ -60,13 +62,14 @@ app.post('/values', async (req, res) => {
     return res.status(422).send('index too high');
   }
 
-  // redisClient.hset('values', index, 'Nothing yet!');
+  // set initial fib value to 'Nothing yet!', to verify whether the worker overwrote the initial value
+  redisClient.hset('values', index, 'Nothing yet!');
   redisPublisher.publish('insert', index);
   pgClient.query('INSERT INTO values(number) VALUES($1)', [index]);
 
   res.send({ working: true });
 });
 
-app.listen(5000, () => {
-  console.log('Listening on http://localhost:5000');
+app.listen(PORT, () => {
+  console.log(`Listening on http://localhost:${PORT}`);
 });
