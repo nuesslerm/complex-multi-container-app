@@ -31,7 +31,9 @@ services:
       - PGPASSWORD=postgrespassword
       # host is euqivalent to docker service name for postgres
       - PGHOST=postgres
-      - PGDATABASE=fibvalues
+      # why can't I rename the postgres database to e.g. fibvalues ?
+      # why does PGDATABASE need to be postgres?
+      - PGDATABASE=postgres
       - PGPORT=5432
   # service names are similar to domain names for the hosted service
   client:
